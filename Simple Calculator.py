@@ -1,7 +1,10 @@
 from tkinter import *
-def calculate():
+calcComp=False
+def calculate(event):
     result=eval(equ.get())
     equ.set(equ.get()+"=\n"+str(result))
+    global calcComp
+    calcComp=True
 
 def show(buttonString):
     content=equ.get()
@@ -9,14 +12,38 @@ def show(buttonString):
         content=""
     equ.set(content+buttonString)
 
-def backspace():
-    equ.set(str(equ.get()[:-1]))
+def backspace(event):
+    global calcComp
+    if calcComp==True:
+        equ.set("0")
+        calcComp=False
+        return 0
+    else:
+        if equ.get()=="0":
+            return 0
+        else:
+            equ.set(str(equ.get()[:-1]))
 
-def clear():
+def clear(event):
     equ.set("0")
+
+def key(event):
+    keyList=["0","1","2","3","4","5","6","7","8","9","+","-","*","/","."]
+    for i in keyList:
+        if repr(event.char)[1]==i:
+            if repr(event.char)[1]=="+" or repr(event.char)[1]=="-" or repr(event.char)[1]=="*" or repr(event.char)[1]=="/" or repr(event.char)[1]==".":
+                if equ.get()[-1]==i:
+                    return 0
+            show(repr(event.char)[1])
 
 root=Tk()
 root.title("計算器")
+
+root.bind("<Key>",key)
+root.bind("<BackSpace>", backspace)
+root.bind("<Escape>",clear)
+root.bind("<Return>",calculate)
+root.bind("<KP_Enter>",calculate)
 
 equ=StringVar()
 equ.set("0")
