@@ -1,6 +1,6 @@
 from tkinter import *
 calcComp=False
-def calculate(event):
+def calculate():
     result=eval(equ.get())
     equ.set(equ.get()+"=\n"+str(result))
     global calcComp
@@ -12,7 +12,7 @@ def show(buttonString):
         content=""
     equ.set(content+buttonString)
 
-def backspace(event):
+def backspace():
     global calcComp
     if calcComp==True:
         equ.set("0")
@@ -24,7 +24,7 @@ def backspace(event):
         else:
             equ.set(str(equ.get()[:-1]))
 
-def clear(event):
+def clear():
     equ.set("0")
 
 def key(event):
@@ -35,15 +35,21 @@ def key(event):
                 if equ.get()[-1]==i:
                     return 0
             show(repr(event.char)[1])
+    if repr(event.keycode)=="104" or repr(event.keycode)=="36":
+        calculate()
+    if repr(event.keycode)=="22":
+        backspace()
+    if repr(event.keycode)=="9":
+        clear()
 
 root=Tk()
 root.title("計算器")
 
 root.bind("<Key>",key)
-root.bind("<BackSpace>", backspace)
-root.bind("<Escape>",clear)
-root.bind("<Return>",calculate)
-root.bind("<KP_Enter>",calculate)
+root.bind("<BackSpace>", key)
+root.bind("<Escape>",key)
+root.bind("<Return>",key)
+root.bind("<KP_Enter>",key)
 
 equ=StringVar()
 equ.set("0")
